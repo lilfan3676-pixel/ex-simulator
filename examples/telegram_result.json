@@ -1,0 +1,114 @@
+{
+ "name": "小安",
+ "type": "personal_chat",
+ "id": 1,
+ "messages": [
+  {
+   "id": 1,
+   "type": "message",
+   "date": "2025-03-01T21:05:00",
+   "from": "阿傑",
+   "text": "欸你上次推薦的那家咖啡廳"
+  },
+  {
+   "id": 2,
+   "type": "message",
+   "date": "2025-03-01T21:05:00",
+   "from": "阿傑",
+   "text": "我今天去了"
+  },
+  {
+   "id": 3,
+   "type": "message",
+   "date": "2025-03-01T21:07:00",
+   "from": "小安",
+   "text": "真的假的"
+  },
+  {
+   "id": 4,
+   "type": "message",
+   "date": "2025-03-01T21:07:00",
+   "from": "小安",
+   "text": "好喝吧哈哈哈"
+  },
+  {
+   "id": 5,
+   "type": "message",
+   "date": "2025-03-01T21:08:00",
+   "from": "小安",
+   "media_type": "sticker",
+   "file": "s.webp",
+   "text": ""
+  },
+  {
+   "id": 6,
+   "type": "message",
+   "date": "2025-03-01T21:10:00",
+   "from": "阿傑",
+   "text": "肉桂捲超好吃\n但是排隊排了半小時"
+  },
+  {
+   "id": 7,
+   "type": "message",
+   "date": "2025-03-01T21:12:00",
+   "from": "小安",
+   "text": [
+    "下次早一點去啊",
+    {
+     "type": "bold",
+     "text": "笨蛋"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "type": "message",
+   "date": "2025-03-02T09:30:00",
+   "from": "小安",
+   "text": "早安"
+  },
+  {
+   "id": 9,
+   "type": "message",
+   "date": "2025-03-02T09:31:00",
+   "from": "小安",
+   "photo": "p.jpg",
+   "text": ""
+  },
+  {
+   "id": 10,
+   "type": "message",
+   "date": "2025-03-02T12:15:00",
+   "from": "阿傑",
+   "text": "早安 剛起床"
+  },
+  {
+   "id": 11,
+   "type": "message",
+   "date": "2025-03-02T12:16:00",
+   "from": "小安",
+   "text": "睡到中午 好爽喔"
+  },
+  {
+   "id": 12,
+   "type": "message",
+   "date": "2025-03-15T23:40:00",
+   "from": "小安",
+   "text": "你睡了嗎"
+  },
+  {
+   "id": 13,
+   "type": "message",
+   "date": "2025-03-15T23:41:00",
+   "from": "阿傑",
+   "text": "還沒啊怎麼了"
+  },
+  {
+   "id": 14,
+   "type": "message",
+   "date": "2025-03-15T23:45:00",
+   "from": "小安",
+   "text": "沒事 只是突然想聊天"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "小安",
+  "me": "阿傑",
+  "subtitle": "範例人物（虛構）",
+  "timezone": "Asia/Taipei",
+  "model": "claude-sonnet-5-5",
+  "whatif": {
+    "label": "如果",
+    "hint": "假設 3/15 那晚你們聊到天亮",
+    "premise": "2025/3/15 那天晚上你們一路聊到天亮，之後你們每天晚上都會聊一下，你對他比以前更直接一點。"
+  }
+}

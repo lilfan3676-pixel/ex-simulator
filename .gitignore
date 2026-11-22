@@ -1,0 +1,15 @@
+# 個人資料一律不進版本控制
+.env
+*.jsonl
+persona.md
+!templates/persona.md
+periods.json
+config.json
+!templates/config.json
+avatar.*
+data/
+kite-chat-data/
+__pycache__/
+.DS_Store
+# 範例人物是虛構的，要放進專案
+!examples/demo/*

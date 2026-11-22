@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>kite-chat</title>
+<style>
+  :root {
+    --bg: #000; --fg: #f5f5f5; --muted: #a8a8a8; --line: #262626;
+    --them: #262626; --me1: #7b2ff7; --me2: #3b6cf6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif; }
+  .app { max-width: 480px; height: 100dvh; margin: 0 auto; display: flex; flex-direction: column;
+    border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    border-bottom: 1px solid var(--line); padding-top: max(10px, env(safe-area-inset-top)); }
+  header .back { font-size: 26px; line-height: 1; color: var(--fg); opacity: .9; }
+  .av { width: 32px; height: 32px; border-radius: 50%; flex: none; background: #3a3a3a center/cover no-repeat;
+    display: grid; place-items: center; font-size: 14px; color: #ddd; }
+  header .av { width: 36px; height: 36px; }
+  header .who { flex: 1; min-width: 0; }
+  header .name { font-weight: 600; font-size: 16px; }
+  header .status { font-size: 12px; color: var(--muted); }
+  .mode { font-size: 13px !important; border: 1px solid #363636 !important; border-radius: 14px; padding: 4px 10px !important; color: var(--muted) !important; }
+  body.whatif .mode { color: #f0c7ff !important; border-color: #8a4fd6 !important; }
+  .periods { display: flex; gap: 6px; padding: 8px 12px; overflow-x: auto; border-bottom: 1px solid var(--line); scrollbar-width: none; }
+  .periods::-webkit-scrollbar { display: none; }
+  .periods button { flex: none; background: none; border: 1px solid #363636; color: var(--muted); border-radius: 16px;
+    padding: 5px 12px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .periods button[aria-pressed="true"] { background: #f5f5f5; color: #000; border-color: #f5f5f5; font-weight: 600; }
+  .periods button.wi[aria-pressed="true"] { background: #8a4fd6; color: #fff; border-color: #8a4fd6; }
+  .period-bar { display: none; text-align: center; font-size: 12px; color: var(--muted); padding: 6px 12px; border-bottom: 1px solid var(--line); }
+  .period-bar.on { display: block; }
+  .whatif-bar { display: none; text-align: center; font-size: 12px; color: #e7cfff; background: #2a1840; padding: 7px 12px; }
+  body.whatif .whatif-bar { display: block; }
+  body.whatif .me .bubble { background: linear-gradient(135deg, #c13584, #8a4fd6); background-attachment: fixed; }
+  header button { background: none; border: 0; color: var(--fg); font-size: 22px; cursor: pointer; padding: 4px 6px; }
+
+  #list { flex: 1; overflow-y: auto; padding: 16px 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .intro { text-align: center; padding: 24px 0 28px; }
+  .intro .av { width: 88px; height: 88px; margin: 0 auto 10px; font-size: 34px; }
+  .intro .n { font-weight: 600; font-size: 18px; }
+  .intro .s { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .row { display: flex; align-items: flex-end; gap: 8px; }
+  .row.me { justify-content: flex-end; }
+  .row .slot { width: 28px; flex: none; }
+  .row .slot .av { width: 28px; height: 28px; font-size: 12px; }
+  .bubble { max-width: 72%; padding: 8px 13px; font-size: 15px; line-height: 1.4; word-break: break-word;
+    white-space: pre-wrap; border-radius: 20px; animation: pop .18s ease-out; }
+  .them .bubble { background: var(--them); }
+  .me .bubble { background: linear-gradient(135deg, var(--me1), var(--me2)); background-attachment: fixed; }
+  /* 連續訊息的圓角 */
+  .them.mid .bubble, .them.top .bubble { border-bottom-left-radius: 6px; }
+  .them.mid .bubble, .them.bot .bubble { border-top-left-radius: 6px; }
+  .me.mid .bubble, .me.top .bubble { border-bottom-right-radius: 6px; }
+  .me.mid .bubble, .me.bot .bubble { border-top-right-radius: 6px; }
+  .gap { height: 10px; }
+  .seen { text-align: right; font-size: 11px; color: var(--muted); padding: 2px 4px 0; }
+  .err { text-align: center; font-size: 12px; color: #ff6b6b; padding: 8px; }
+
+  .typing .bubble { display: flex; gap: 4px; padding: 12px 14px; }
+  .typing i { width: 7px; height: 7px; border-radius: 50%; background: #8e8e8e; animation: blink 1.2s infinite; }
+  .typing i:nth-child(2) { animation-delay: .2s; } .typing i:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+  @keyframes pop { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  form { display: flex; align-items: center; gap: 8px; margin: 8px 12px; padding: 6px 6px 6px 16px;
+    border: 1px solid #363636; border-radius: 24px; margin-bottom: max(8px, env(safe-area-inset-bottom)); }
+  input { flex: 1; background: none; border: 0; outline: none; color: var(--fg); font-size: 15px; padding: 6px 0; min-width: 0; }
+  input::placeholder { color: var(--muted); }
+  form button { background: none; border: 0; color: #4a8cff; font-weight: 600; font-size: 15px; padding: 6px 10px; cursor: pointer; }
+  form button:disabled { opacity: .35; cursor: default; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <span class="back">‹</span>
+    <div class="av" data-av></div>
+    <div class="who"><div class="name" data-name></div><div class="status" id="status">剛剛在線上</div></div>
+    <button id="reset" title="清除對話">⋯</button>
+  </header>
+  <nav class="periods" id="periods" aria-label="選擇時期"></nav>
+  <div class="period-bar" id="pbar"></div>
+  <div class="whatif-bar" id="wbar"></div>
+  <div id="list">
+    <div class="intro"><div class="av" data-av></div><div class="n" data-name></div><div class="s" id="sub"></div></div>
+  </div>
+  <form id="f" autocomplete="off">
+    <input id="t" placeholder="傳送訊息……" enterkeyhint="send">
+    <button id="send" disabled>傳送</button>
+  </form>
+</div>
+<script>
+// 選項：每個時期的 id（例如 p1、p2、now），或 whatif（平行時空）
+let CFG = { name: '', subtitle: '', periods: [], whatif: null };
+let NS = 'kite';
+let sel = 'now', mode = 'real', KEY = '';
+let history = [];
+const list = document.getElementById('list');
+const input = document.getElementById('t');
+const sendBtn = document.getElementById('send');
+const statusEl = document.getElementById('status');
+const store = {
+  get(k, d) { try { return localStorage.getItem(NS + ':' + k) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(NS + ':' + k, v); } catch {} },
+};
+const keyOf = (s) => 'history-' + s;
+const save = () => store.set(KEY, JSON.stringify(history));
+const initial = () => (CFG.name || '?').slice(-1);
+
+// 有頭貼就用頭貼，沒有就顯示名字最後一個字
+const img = new Image();
+let hasAvatar = false;
+img.onload = () => { hasAvatar = true; paintAvatars(); };
+function paintAvatars() {
+  document.querySelectorAll('[data-av]').forEach(el => {
+    if (hasAvatar) { el.style.backgroundImage = 'url(/avatar)'; el.textContent = ''; }
+    else el.textContent = initial();
+  });
+}
+const avatarEl = () => {
+  const d = document.createElement('div'); d.className = 'av'; d.setAttribute('data-av', '');
+  if (hasAvatar) d.style.backgroundImage = 'url(/avatar)'; else d.textContent = initial();
+  return d;
+};
+
+function render() {
+  list.querySelectorAll('.row,.gap,.seen,.err').forEach(n => n.remove());
+  history.forEach((m, i) => {
+    const prev = history[i - 1], next = history[i + 1];
+    const same = (a) => a && a.role === m.role;
+    if (prev && !same(prev)) list.append(Object.assign(document.createElement('div'), { className: 'gap' }));
+    const pos = same(prev) && same(next) ? 'mid' : same(next) ? 'top' : same(prev) ? 'bot' : '';
+    const row = document.createElement('div');
+    row.className = 'row ' + (m.role === 'user' ? 'me' : 'them') + ' ' + pos;
+    if (m.role === 'assistant') {
+      const slot = document.createElement('div'); slot.className = 'slot';
+      if (!same(next)) slot.append(avatarEl());
+      row.append(slot);
+    }
+    const b = document.createElement('div'); b.className = 'bubble'; b.textContent = m.content;
+    row.append(b); list.append(row);
+  });
+  const last = history[history.length - 1];
+  if (last && last.role === 'user' && seen) list.append(Object.assign(document.createElement('div'), { className: 'seen', textContent: '已讀' }));
+  list.scrollTop = list.scrollHeight;
+}
+
+let typingEl = null;
+function showTyping(on) {
+  if (on && !typingEl) {
+    typingEl = document.createElement('div'); typingEl.className = 'row them typing';
+    const slot = document.createElement('div'); slot.className = 'slot'; slot.append(avatarEl());
+    const b = document.createElement('div'); b.className = 'bubble'; b.innerHTML = '<i></i><i></i><i></i>';
+    typingEl.append(slot, b);
+  }
+  if (on) { list.append(typingEl); statusEl.textContent = '正在輸入……'; }
+  else { typingEl?.remove(); statusEl.textContent = '目前在線上'; }
+  list.scrollTop = list.scrollHeight;
+}
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+let timer = null, busy = false, pending = false, seen = false;
+
+// 你連傳幾則時，等你停下來再一起回，像真人一樣
+function schedule() { clearTimeout(timer); timer = setTimeout(reply, 1800); }
+
+async function reply() {
+  if (busy) { pending = true; return; }
+  busy = true; pending = false;
+  try {
+    await sleep(600 + Math.random() * 1200);
+    seen = true; render();
+    await sleep(500 + Math.random() * 800);
+    showTyping(true);
+    const res = await fetch('/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ messages: history, mode, period: sel === 'whatif' ? 'now' : sel }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '出錯了');
+    for (let i = 0; i < data.lines.length; i++) {
+      const line = data.lines[i];
+      if (i > 0) { showTyping(true); await sleep(Math.min(2600, 450 + line.length * 90 + Math.random() * 500)); }
+      else await sleep(Math.min(2000, 300 + line.length * 60));
+      if (pending) break; // 你又傳訊息了，就先停下來看你說什麼
+      showTyping(false);
+      history.push({ role: 'assistant', content: line }); save(); render();
+    }
+  } catch (e) {
+    showTyping(false);
+    list.append(Object.assign(document.createElement('div'), { className: 'err', textContent: e.message }));
+    list.scrollTop = list.scrollHeight;
+  } finally {
+    showTyping(false); seen = false; busy = false;
+    if (pending) schedule();
+  }
+}
+
+document.getElementById('f').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  history.push({ role: 'user', content: text }); save();
+  input.value = ''; sendBtn.disabled = true; seen = false; render();
+  if (busy) pending = true; else schedule();
+});
+input.addEventListener('input', () => { sendBtn.disabled = !input.value.trim(); });
+
+const periodsEl = document.getElementById('periods');
+const pbar = document.getElementById('pbar');
+function options() {
+  const l = CFG.periods.length ? CFG.periods : [{ id: 'now', label: '現在' }];
+  return CFG.whatif ? [...l, { id: 'whatif', label: CFG.whatif.label, hint: CFG.whatif.hint }] : l;
+}
+function paintPeriods() {
+  const opts = options();
+  periodsEl.innerHTML = '';
+  periodsEl.style.display = opts.length > 1 ? '' : 'none';
+  opts.forEach(p => {
+    const b = document.createElement('button');
+    b.textContent = p.label; b.dataset.id = p.id;
+    if (p.id === 'whatif') b.className = 'wi';
+    if (p.hint) b.title = p.hint;
+    b.setAttribute('aria-pressed', String(p.id === sel));
+    b.addEventListener('click', () => switchTo(p.id));
+    periodsEl.append(b);
+  });
+  const cur = opts.find(p => p.id === sel);
+  const hint = sel !== 'whatif' && sel !== 'now' ? (cur?.hint || (cur?.today ? `${cur.label}：她只知道 ${cur.today} 以前的事` : '')) : '';
+  pbar.textContent = hint; pbar.classList.toggle('on', !!hint);
+}
+function switchTo(id) {
+  if (busy || id === sel) return;
+  clearTimeout(timer);
+  sel = id; mode = sel === 'whatif' ? 'whatif' : 'real';
+  store.set('period', sel);
+  KEY = keyOf(sel);
+  document.body.classList.toggle('whatif', mode === 'whatif');
+  try { history = JSON.parse(store.get(KEY, '[]')); } catch { history = []; }
+  seen = false; paintPeriods(); render();
+}
+document.getElementById('reset').addEventListener('click', () => {
+  if (confirm('要清除這段對話，重新開始嗎？')) { history = []; save(); render(); }
+});
+
+fetch('/api/config').then(r => r.json()).then(c => {
+  CFG = { ...CFG, ...c };
+  NS = 'kite:' + CFG.name;
+  document.title = CFG.name;
+  document.querySelectorAll('[data-name]').forEach(el => el.textContent = CFG.name);
+  document.getElementById('sub').textContent = CFG.subtitle || '';
+  document.getElementById('wbar').textContent = CFG.whatif ? '平行時空：' + CFG.whatif.hint + '。這不是真的她。' : '';
+  const ids = options().map(p => p.id);
+  sel = store.get('period', 'now'); if (!ids.includes(sel)) sel = ids.includes('now') ? 'now' : ids[ids.length - 1];
+  mode = sel === 'whatif' ? 'whatif' : 'real';
+  document.body.classList.toggle('whatif', mode === 'whatif');
+  KEY = keyOf(sel);
+  try { history = JSON.parse(store.get(KEY, '[]')); } catch { history = []; }
+  paintAvatars(); img.src = '/avatar'; paintPeriods(); render(); input.focus();
+});
+</script>
+</body>
+</html>
