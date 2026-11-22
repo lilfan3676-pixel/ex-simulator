@@ -1,5 +1,15 @@
 # 前任模擬器 Ex Simulator
 
+> *「聊天紀錄留下來的不只是文字，是那個人說話的樣子：她的口頭禪、她回你的速度、她怎麼把在乎藏在一句『哼』後面。」*
+
+**如果還有話沒說完，就再聊一次吧。**
+
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933)
+![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-D97757)
+![Platforms](https://img.shields.io/badge/LINE_%7C_IG_%7C_Messenger_%7C_WhatsApp_%7C_Telegram-supported-brightgreen)
+
 把你和某個人的聊天紀錄，蒸餾成一個會照「她」的語氣回你的聊天視窗。
 
 - **支援 LINE、Instagram、Messenger、WhatsApp、Telegram** 的官方匯出檔，可以多個平台合在一起（例如前半段在 IG、後半段在 LINE）。
