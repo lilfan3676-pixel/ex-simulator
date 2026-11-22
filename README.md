@@ -4,11 +4,7 @@
 
 **如果還有話沒說完，就再聊一次吧。**
 
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933)
-![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-D97757)
-![Platforms](https://img.shields.io/badge/LINE_%7C_IG_%7C_Messenger_%7C_WhatsApp_%7C_Telegram-supported-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow) ![Python](https://img.shields.io/badge/Python-3.9%2B-blue) ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933) ![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-D97757) ![Platforms](https://img.shields.io/badge/LINE_%7C_IG_%7C_Messenger_%7C_WhatsApp_%7C_Telegram-supported-brightgreen)
 
 把你和某個人的聊天紀錄，蒸餾成一個會照「她」的語氣回你的聊天視窗。
 
