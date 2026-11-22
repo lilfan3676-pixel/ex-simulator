@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>kite-chat</title>
+<title>前任模擬器 Ex Simulator</title>
 <style>
   :root {
     --bg: #000; --fg: #f5f5f5; --muted: #a8a8a8; --line: #262626;
@@ -97,7 +97,7 @@
 <script>
 // 選項：每個時期的 id（例如 p1、p2、now），或 whatif（平行時空）
 let CFG = { name: '', subtitle: '', periods: [], whatif: null };
-let NS = 'kite';
+let NS = 'exsim';
 let sel = 'now', mode = 'real', KEY = '';
 let history = [];
 const list = document.getElementById('list');
@@ -248,7 +248,7 @@ document.getElementById('reset').addEventListener('click', () => {
 
 fetch('/api/config').then(r => r.json()).then(c => {
   CFG = { ...CFG, ...c };
-  NS = 'kite:' + CFG.name;
+  NS = 'exsim:' + CFG.name;
   document.title = CFG.name;
   document.querySelectorAll('[data-name]').forEach(el => el.textContent = CFG.name);
   document.getElementById('sub').textContent = CFG.subtitle || '';

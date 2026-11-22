@@ -1,4 +1,4 @@
-// kite-chat 聊天視窗：本機伺服器（只在你自己的電腦上跑）
+// 前任模擬器 Ex Simulator 聊天視窗：本機伺服器（只在你自己的電腦上跑）
 // 用法：node app/server.mjs <人物資料夾>
 // 人物資料夾裡要有：config.json、persona.md，可選 periods.json、avatar.jpg、.env（放 ANTHROPIC_API_KEY）
 import http from 'node:http';
@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const APP = path.dirname(fileURLToPath(import.meta.url));
-const DATA = path.resolve(process.argv[2] || process.env.KITE_DATA || '.');
+const DATA = path.resolve(process.argv[2] || process.env.EXSIM_DATA || '.');
 const file = (n) => path.join(DATA, n);
 
 if (!fs.existsSync(file('persona.md'))) {

@@ -1,10 +1,10 @@
 ---
-name: kite-chat
-description: 把你和某個人的聊天紀錄（LINE、Instagram、Messenger、WhatsApp、Telegram 匯出檔）蒸餾成人物檔，再開一個像 IG 私訊的本機聊天網頁，讓「她」照以前的語氣回你；可以切換不同時期，也有「如果」平行時空模式。Use when the user wants to turn chat exports with a specific person into a persona and chat with it, mentions 蒸餾、人物檔、前任.skill、想跟他／她再聊一次, or wants to update an existing kite-chat persona.
+name: ex-simulator
+description: 前任模擬器（Ex Simulator）。把你和某個人的聊天紀錄（LINE、Instagram、Messenger、WhatsApp、Telegram 匯出檔）蒸餾成人物檔，再開一個像 IG 私訊的本機聊天網頁，讓「她」照以前的語氣回你；可以切換不同時期，也有「如果」平行時空模式。Use when the user wants to turn chat exports with a specific person into a persona and chat with it, mentions 蒸餾、人物檔、前任.skill、想跟他／她再聊一次, or wants to update an existing ex-simulator persona.
 user-invocable: true
 ---
 
-# kite-chat：把聊天紀錄蒸餾成一個能聊天的人
+# 前任模擬器 Ex Simulator：把聊天紀錄蒸餾成一個能聊天的人
 
 這個 skill 會帶使用者走完：**匯出檔 → 整理 → 讀樣本 → 寫人物檔 → 分時期 → 開聊天網頁**。
 所有資料都留在使用者自己的電腦；只有聊天時，人物檔和對話內容會送到 Claude API。
@@ -18,7 +18,7 @@ user-invocable: true
 3. 問清楚（用選擇題）：
    - 對方怎麼稱呼（顯示在聊天視窗的名字）、她怎麼叫使用者
    - 匯出檔放在哪裡（可以是資料夾）
-   - 人物資料夾要放哪，預設 `~/kite-chat-data/<英文或拼音代稱>/`
+   - 人物資料夾要放哪，預設 `~/ex-simulator-data/<英文或拼音代稱>/`
    - 要不要「如果」平行時空模式（要的話，假設哪一天的哪件事不一樣）
 
 各平台怎麼匯出，見 `$SKILL/docs/export.md`，使用者不知道時照著一步一步帶。

@@ -8,7 +8,7 @@ config.json
 !templates/config.json
 avatar.*
 data/
-kite-chat-data/
+ex-simulator-data/
 __pycache__/
 .DS_Store
 # 範例人物是虛構的，要放進專案
