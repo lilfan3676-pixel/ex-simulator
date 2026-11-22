@@ -190,6 +190,8 @@ def parse_whatsapp(path):
 # ---------------- 判斷格式 ----------------
 def load_file(path):
     p = Path(path)
+    if p.name in ('config.json', 'periods.json', 'package.json'):  # 人物資料夾本身的設定檔，不是聊天紀錄
+        return [], []
     if p.suffix.lower() == '.json':
         data = json.load(open(p, encoding='utf-8'))
         if isinstance(data, dict) and ('chats' in data or data.get('type') in ('personal_chat', 'private_group', 'private_supergroup', 'bot_chat', 'saved_messages')):
